@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
+import javax.swing.text.JTextComponent;
 
 import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
@@ -46,7 +47,7 @@ class ParameterizedCompletionDescriptionToolTip {
 	 */
 	private ParameterizedCompletion pc;
 
-
+	private JTextComponent comp;
 	/**
 	 * Constructor.
 	 *
@@ -61,7 +62,7 @@ class ParameterizedCompletionDescriptionToolTip {
 		tooltip = new JWindow(owner);
 
 		this.pc = pc;
-
+		this.comp = ac.getTextComponent();
 		descLabel = new JLabel();
 		descLabel.setBorder(BorderFactory.createCompoundBorder(
 					TipUtil.getToolTipBorder(),
@@ -157,11 +158,17 @@ class ParameterizedCompletionDescriptionToolTip {
 	 * @return Whether the text needed to be updated.
 	 */
 	public boolean updateText(int selectedParam) {
-
+		//System.out.println("selectedParam = " + String.valueOf(selectedParam) );
 		StringBuilder sb = new StringBuilder("<html>");
 		int paramCount = pc.getParamCount();
-		for (int i=0; i<paramCount; i++) {
-
+		String fullText = pc.getProvider().getAlreadyEnteredFullLineText(this.comp);
+		int i =0;
+		if(fullText.indexOf('.')>0){
+			i = 1;
+			selectedParam = 1;
+		}
+		for (; i<paramCount; i++) {
+			//System.out.println("startIndex = " + String.valueOf(i) );
 			if (i==selectedParam) {
 				sb.append("<b>");
 			}
@@ -178,7 +185,7 @@ class ParameterizedCompletionDescriptionToolTip {
 			if (i<paramCount-1) {
 				sb.append(pc.getProvider().getParameterListSeparator());
 			}
-
+			//System.out.println(sb.toString());
 		}
 
 		if (selectedParam>=0 && selectedParam<paramCount) {
@@ -190,7 +197,7 @@ class ParameterizedCompletionDescriptionToolTip {
 				sb.append(desc);
 			}
 		}
-
+	//System.out.println(sb.toString());
 		descLabel.setText(sb.toString());
 		tooltip.pack();
 

@@ -6,3 +6,12 @@ autocomplete_*.zip
 build
 .gradle
 
+AutoComplete.iml
+.settings/org.eclipse.buildship.core.prefs
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/libraries/junit_4_11.xml
+.idea/libraries/hamcrest_core_1_3.xml
+.idea/artifacts/autocomplete.xml

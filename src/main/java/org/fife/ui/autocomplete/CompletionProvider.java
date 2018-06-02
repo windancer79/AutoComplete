@@ -26,7 +26,7 @@ import javax.swing.text.JTextComponent;
  * @author Robert Futrell
  * @version 1.0
  */
-public interface CompletionProvider {
+public interface 	CompletionProvider {
 
 
 	/**
@@ -51,7 +51,12 @@ public interface CompletionProvider {
 	 */
 	public String getAlreadyEnteredText(JTextComponent comp);
 
-
+	/**
+	 * get All char include dot
+	 * @param comp
+	 * @return
+	 */
+	public String getAlreadyEnteredFullLineText(JTextComponent comp);
 	/**
 	 * Gets the possible completions for the text component at the current
 	 * caret position.
