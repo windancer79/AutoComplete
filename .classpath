@@ -13,6 +13,6 @@
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry kind="lib" path="D:/Work/Dophin/DolphinDBStreamWin/gui/RSyntaxTextArea.jar"/>
+	<classpathentry kind="lib" path="/DolphinDBGUI/lib/rsyntaxarea.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -226,11 +226,8 @@ public class FunctionCompletion extends VariableCompletion
 	public ParameterizedCompletionInsertionInfo getInsertionInfo(
 			JTextComponent tc, boolean replaceTabsWithSpaces) {
 
-		if (AutoCompletion.getDebug()) {
-			System.out.println("FunctionComplete: getInsertionInfo");
-		}
 		ParameterizedCompletionInsertionInfo info =
-			new ParameterizedCompletionInsertionInfo();
+				new ParameterizedCompletionInsertionInfo();
 
 		StringBuilder sb = new StringBuilder();
 		char paramListStart = getProvider().getParameterListStart();
@@ -255,15 +252,10 @@ public class FunctionCompletion extends VariableCompletion
 		// Create the text to insert (keep it one completion for
 		// performance and simplicity of undo/redo).
 		int start = dot;
-		String fullText = this.getProvider().getAlreadyEnteredFullLineText(tc);
-		int startParamIndex = 0;
-		if(fullText.indexOf('.')>0){
-			startParamIndex = 1;
-		}
-		for (int i=startParamIndex; i<paramCount; i++) {
+		for (int i=0; i<paramCount; i++) {
 			Parameter param = getParam(i);
 			String paramText = getParamText(param);
-			if (i==startParamIndex) {
+			if (i==0) {
 				firstParamLen = paramText.length();
 			}
 			sb.append(paramText);
@@ -282,7 +274,7 @@ public class FunctionCompletion extends VariableCompletion
 		endOffs -= 1;//getProvider().getParameterListStart().length();
 		info.addReplacementLocation(endOffs, endOffs); // offset after function
 		info.setDefaultEndOffs(endOffs);
-		
+
 		int selectionEnd = paramCount>0 ? (dot+firstParamLen) : dot;
 		info.setInitialSelection(dot, selectionEnd);
 		info.setTextToInsert(sb.toString());
@@ -327,7 +319,7 @@ public class FunctionCompletion extends VariableCompletion
 	 * @param param The parameter.
 	 * @return The text.
 	 */
-	private String getParamText(ParameterizedCompletion.Parameter param) {
+	protected String getParamText(ParameterizedCompletion.Parameter param) {
 		String text = param.getName();
 		if (text==null) {
 			text = param.getType();

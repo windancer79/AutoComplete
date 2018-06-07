@@ -8,8 +8,6 @@
  */
 package org.fife.ui.autocomplete;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -98,7 +96,7 @@ public abstract class CompletionProviderBase implements CompletionProvider {
 
 	@Override
 	public String getAlreadyEnteredFullLineText(JTextComponent comp){
-		throw new NotImplementedException();
+		return "";
 	}
 
 	/**
