@@ -165,7 +165,6 @@ class ParameterizedCompletionDescriptionToolTip {
 		int i =0;
 		if(fullText.indexOf('.')>0){
 			i = 1;
-			selectedParam = 1;
 		}
 		for (; i<paramCount; i++) {
 			//System.out.println("startIndex = " + String.valueOf(i) );
@@ -185,7 +184,6 @@ class ParameterizedCompletionDescriptionToolTip {
 			if (i<paramCount-1) {
 				sb.append(pc.getProvider().getParameterListSeparator());
 			}
-			//System.out.println(sb.toString());
 		}
 
 		if (selectedParam>=0 && selectedParam<paramCount) {
@@ -197,7 +195,7 @@ class ParameterizedCompletionDescriptionToolTip {
 				sb.append(desc);
 			}
 		}
-	//System.out.println(sb.toString());
+
 		descLabel.setText(sb.toString());
 		tooltip.pack();
 
