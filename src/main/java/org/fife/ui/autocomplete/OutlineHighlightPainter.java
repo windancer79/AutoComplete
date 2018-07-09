@@ -92,7 +92,7 @@ class OutlineHighlightPainter extends
 				g.drawLine(r.x, r.y, r.x, r.y+r.height);
 				return r;
 			} catch (BadLocationException ble) {
-				ble.printStackTrace(); // Never happens
+				//ble.printStackTrace(); // Never happens
 				return null;
 			}
 		}
@@ -119,7 +119,7 @@ class OutlineHighlightPainter extends
 			g.drawRect(r.x, r.y, r.width - 1, r.height - 1);
 			return r;
 		} catch (BadLocationException e) { // Never happens
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 

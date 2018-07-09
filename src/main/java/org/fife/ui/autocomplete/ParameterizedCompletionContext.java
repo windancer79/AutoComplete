@@ -3,7 +3,7 @@
  *
  * ParameritizedCompletionContext.java - Manages the state of parameterized
  * completion-related UI components during code completion.
- * 
+ *
  * This library is distributed under a modified BSD license.  See the included
  * AutoComplete.License.txt file for details.
  */
@@ -153,6 +153,8 @@ class ParameterizedCompletionContext {
 	private Action oldEscapeAction;
 	private Object oldClosingKey;
 	private Action oldClosingAction;
+    private Object oldCommaKey;
+    private Action oldCommaAction;
 
 	private static final String IM_KEY_TAB = "ParamCompKey.Tab";
 	private static final String IM_KEY_SHIFT_TAB = "ParamCompKey.ShiftTab";
@@ -161,7 +163,7 @@ class ParameterizedCompletionContext {
 	private static final String IM_KEY_ESCAPE = "ParamCompKey.Escape";
 	private static final String IM_KEY_ENTER = "ParamCompKey.Enter";
 	private static final String IM_KEY_CLOSING = "ParamCompKey.Closing";
-
+    private static final String IM_KEY_COMMA = "ParamCompKey.COMMA";
 
 	/**
 	 * Constructor.
@@ -509,6 +511,12 @@ class ParameterizedCompletionContext {
 		oldClosingAction = am.get(IM_KEY_CLOSING);
 		am.put(IM_KEY_CLOSING, new ClosingAction());
 
+        char comma = ',';
+        ks = KeyStroke.getKeyStroke(comma);
+        oldCommaKey = im.get(ks);
+        im.put(ks, IM_KEY_COMMA);
+        oldCommaAction = am.get(IM_KEY_COMMA);
+        am.put(IM_KEY_COMMA, new CommaAction());
 	}
 
 
@@ -616,7 +624,7 @@ class ParameterizedCompletionContext {
 
 
 	private void possiblyUpdateParamCopies(Document doc) {
-		
+
 		int index = getCurrentParameterIndex();
 		// FunctionCompletions add an extra param at end of inserted text
 		if (index>-1 && index<pc.getParamCount()) {
@@ -794,6 +802,10 @@ class ParameterizedCompletionContext {
 		im.put(ks, oldClosingKey);
 		am.put(IM_KEY_CLOSING, oldClosingAction);
 
+        char comma = ',';
+        ks = KeyStroke.getKeyStroke(comma);
+        im.put(ks, oldCommaKey);
+        am.put(IM_KEY_COMMA, oldCommaAction);
 	}
 
 
@@ -805,7 +817,7 @@ class ParameterizedCompletionContext {
 	 * @return The "prefix" of text in the caret's parameter before the caret.
 	 */
 	private String updateToolTipText() {
-
+		System.out.println("updateToolTipText() invoked");
 		JTextComponent tc = ac.getTextComponent();
 		int dot = tc.getSelectionStart();
 		int mark = tc.getSelectionEnd();
@@ -839,6 +851,7 @@ class ParameterizedCompletionContext {
 
 
 	private void updateToolTipText(int selectedParam) {
+		System.out.println("updateToolTipText(selectedParam) invoked");
 		if (selectedParam!=lastSelectedParam) {
 			if (tip!=null) {
 				tip.updateText(selectedParam);
@@ -861,7 +874,26 @@ class ParameterizedCompletionContext {
 		}
 	}
 
+    private class CommaAction extends AbstractAction {
+		private int countSubstr(String string, String a) {
+			int i = string.length() - string.replace(a, "").length();
+			return i / a.length();
+		}
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JTextComponent tc = ac.getTextComponent();
+            tc.replaceSelection(e.getActionCommand());
 
+            String t = ac.getCompletionProvider().getAlreadyEnteredFullLineText(tc);
+
+            String s = t.substring(t.lastIndexOf("("));
+			System.out.println("currentString = " + t);
+			int commaCount = countSubstr(s,",");
+			System.out.println("commaCount = " + commaCount);
+            updateToolTipText(commaCount);
+
+        }
+    }
 	/**
 	 * Called when the user presses Enter while entering parameters.
 	 */
@@ -957,7 +989,7 @@ class ParameterizedCompletionContext {
 				count++;
 				old = pos + 1;
 			}
-			
+
 			return count;
 		}
 
