@@ -858,17 +858,19 @@ class ParameterizedCompletionContext {
 	private String updateToolTipText() {
 		JTextComponent tc = ac.getTextComponent();
 		String fullText = pc.getProvider().getAlreadyEnteredFullLineText(tc);
-		String s = fullText.substring(fullText.lastIndexOf("("));
-		String[]  arr = s.split(",");
-		int index = arr.length-1;
-		String paramPrefix = arr[index];
-		updateToolTipText(index);
-		return paramPrefix;
-
+		int start = fullText.lastIndexOf("(");
+		if(start>=0){
+			String s = fullText.substring(start);
+			String[]  arr = s.split(",");
+			int index = arr.length-1;
+			String paramPrefix = arr[index];
+			updateToolTipText(index);
+			return paramPrefix;
+		}
+		return "";
 	}
 
 	private void updateToolTipText(int selectedParam) {
-//		System.out.println("updateToolTipText(selectedParam) invoked");
 		if (selectedParam!=lastSelectedParam) {
 			if (tip!=null) {
 				tip.updateText(selectedParam);
@@ -901,13 +903,12 @@ class ParameterizedCompletionContext {
             tc.replaceSelection(e.getActionCommand());
 
             String t = ac.getCompletionProvider().getAlreadyEnteredFullLineText(tc);
-
-            String s = t.substring(t.lastIndexOf("("));
-//			System.out.println("currentString = " + t);
-			int commaCount = countSubstr(s,",");
-//			System.out.println("commaCount = " + commaCount);
-            updateToolTipText(commaCount);
-
+			int start = t.lastIndexOf("(");
+			if(start>=0){
+				String s = t.substring(start);
+				int commaCount = countSubstr(s,",");
+				updateToolTipText(commaCount);
+			}
         }
     }
 	/**
@@ -1051,7 +1052,6 @@ class ParameterizedCompletionContext {
 		 */
 		@Override
 		public void caretUpdate(CaretEvent e) {
-			System.out.println("caretUpdate invoked");
 			if (maxPos==null) { // Sanity check
 				deactivate();
 				return;

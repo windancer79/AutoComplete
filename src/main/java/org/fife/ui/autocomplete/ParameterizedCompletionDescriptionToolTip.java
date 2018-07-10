@@ -119,11 +119,11 @@ class ParameterizedCompletionDescriptionToolTip {
         //Dimension screenSize = tooltip.getToolkit().getScreenSize();
 
         // Try putting our stuff "above" the caret first.
-        int y = r.y - 5 - tooltip.getHeight();
-        if (y < 0) {
-            y = r.y + r.height + 5;
-        }
-
+//        int y = r.y - 5 - tooltip.getHeight();
+//        if (y < 0) {
+//            y = r.y + r.height + 5;
+//        }
+        int y = r.y + r.height + 2;
         // Get x-coordinate of completions.  Try to align left edge with the
         // caret first.
         int x = r.x;
