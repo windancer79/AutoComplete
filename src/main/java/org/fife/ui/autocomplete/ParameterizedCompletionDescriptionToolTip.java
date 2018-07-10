@@ -15,10 +15,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
 import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
+import org.omg.CORBA.INTERNAL;
 
 
 /**
@@ -64,11 +66,12 @@ class ParameterizedCompletionDescriptionToolTip {
         this.comp = ac.getTextComponent();
         descLabel = new JLabel();
         descLabel.setBorder(BorderFactory.createCompoundBorder(
-                TipUtil.getToolTipBorder(),
+                BorderFactory.createLineBorder(new Color(Integer.parseInt("E8E8E8",16)),1),
                 BorderFactory.createEmptyBorder(2, 5, 2, 5)));
         descLabel.setOpaque(true);
+
         //descLabel.setBackground(TipUtil.getToolTipBackground());
-        descLabel.setBackground(Color.lightGray);
+        descLabel.setBackground(new Color(Integer.parseInt("EDEDED",16)));
         // It appears that if a JLabel is set as a content pane directly, when
         // using the JDK's opacity API's, it won't paint its background, even
         // if label.setOpaque(true) is called.  You have to have a container
@@ -173,7 +176,7 @@ class ParameterizedCompletionDescriptionToolTip {
         for (; i < internalParamCount; i++) {
             //System.out.println("startIndex = " + String.valueOf(i) );
             if (i == selectedParam) {
-                sb.append("<b>");
+                sb.append("<span style=\'color:#A52A2A;\'><b>");
             }else{
                 sb.append("<span style=\'color:#666666;\'>");
             }
@@ -185,7 +188,7 @@ class ParameterizedCompletionDescriptionToolTip {
             sb.append(RSyntaxUtilities.escapeForHtml(temp, "<br>", false));
 
             if (i == selectedParam) {
-                sb.append("</b>");
+                sb.append("</b></span>");
             }else{
                 sb.append("</span>");
             }
