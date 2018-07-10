@@ -816,42 +816,59 @@ class ParameterizedCompletionContext {
 	 *
 	 * @return The "prefix" of text in the caret's parameter before the caret.
 	 */
+//	private String updateToolTipText() {
+//		JTextComponent tc = ac.getTextComponent();
+//		int dot = tc.getSelectionStart();
+//		System.out.println("updateToolTipText.dot = " + dot);
+//		int mark = tc.getSelectionEnd();
+//		System.out.println("updateToolTipText.mark = " + mark);
+//		int index = -1;
+//		String paramPrefix = null;
+//
+//		List<Highlight> paramHighlights = getParameterHighlights();
+//		System.out.println("updateToolTipText.paramHighlights.size = " + paramHighlights.size());
+//		for (int i=0; i<paramHighlights.size(); i++) {
+//			Highlight h = paramHighlights.get(i);
+//			// "+1" because of param hack - see OutlineHighlightPainter
+//			int start = h.getStartOffset()+1;
+//			System.out.println("the " + i + "st param.start = " + start);
+//			System.out.println("the " + i + "st param.end = " + h.getEndOffset());
+//
+//			if (dot>=start && dot<=h.getEndOffset()) {
+//				try {
+//					// All text selected => offer all suggestions, otherwise
+//					// use prefix before selection
+//					if (dot!=start || mark!=h.getEndOffset()) {
+//						paramPrefix = tc.getText(start, dot-start);
+//					}
+//				} catch (BadLocationException ble) {
+//					ble.printStackTrace();
+//				}
+//				System.out.println("curent " + i + "st param.paramPrefix = " + paramPrefix);
+//				index = i;
+//				break;
+//			}
+//		}
+//
+//		updateToolTipText(index);
+//		return paramPrefix;
+//
+//	}
+
 	private String updateToolTipText() {
-		System.out.println("updateToolTipText() invoked");
 		JTextComponent tc = ac.getTextComponent();
-		int dot = tc.getSelectionStart();
-		int mark = tc.getSelectionEnd();
-		int index = -1;
-		String paramPrefix = null;
-
-		List<Highlight> paramHighlights = getParameterHighlights();
-		for (int i=0; i<paramHighlights.size(); i++) {
-			Highlight h = paramHighlights.get(i);
-			// "+1" because of param hack - see OutlineHighlightPainter
-			int start = h.getStartOffset()+1;
-			if (dot>=start && dot<=h.getEndOffset()) {
-				try {
-					// All text selected => offer all suggestions, otherwise
-					// use prefix before selection
-					if (dot!=start || mark!=h.getEndOffset()) {
-						paramPrefix = tc.getText(start, dot-start);
-					}
-				} catch (BadLocationException ble) {
-					ble.printStackTrace();
-				}
-				index = i;
-				break;
-			}
-		}
-
+		String fullText = pc.getProvider().getAlreadyEnteredFullLineText(tc);
+		String s = fullText.substring(fullText.lastIndexOf("("));
+		String[]  arr = s.split(",");
+		int index = arr.length-1;
+		String paramPrefix = arr[index];
 		updateToolTipText(index);
 		return paramPrefix;
 
 	}
 
-
 	private void updateToolTipText(int selectedParam) {
-		System.out.println("updateToolTipText(selectedParam) invoked");
+//		System.out.println("updateToolTipText(selectedParam) invoked");
 		if (selectedParam!=lastSelectedParam) {
 			if (tip!=null) {
 				tip.updateText(selectedParam);
@@ -873,12 +890,11 @@ class ParameterizedCompletionContext {
 			paramChoicesWindow.updateUI();
 		}
 	}
-
+	private int countSubstr(String string, String a) {
+		int i = string.length() - string.replace(a, "").length();
+		return i / a.length();
+	}
     private class CommaAction extends AbstractAction {
-		private int countSubstr(String string, String a) {
-			int i = string.length() - string.replace(a, "").length();
-			return i / a.length();
-		}
         @Override
         public void actionPerformed(ActionEvent e) {
             JTextComponent tc = ac.getTextComponent();
@@ -887,9 +903,9 @@ class ParameterizedCompletionContext {
             String t = ac.getCompletionProvider().getAlreadyEnteredFullLineText(tc);
 
             String s = t.substring(t.lastIndexOf("("));
-			System.out.println("currentString = " + t);
+//			System.out.println("currentString = " + t);
 			int commaCount = countSubstr(s,",");
-			System.out.println("commaCount = " + commaCount);
+//			System.out.println("commaCount = " + commaCount);
             updateToolTipText(commaCount);
 
         }
@@ -1035,6 +1051,7 @@ class ParameterizedCompletionContext {
 		 */
 		@Override
 		public void caretUpdate(CaretEvent e) {
+			System.out.println("caretUpdate invoked");
 			if (maxPos==null) { // Sanity check
 				deactivate();
 				return;

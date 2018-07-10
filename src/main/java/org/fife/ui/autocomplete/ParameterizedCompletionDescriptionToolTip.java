@@ -204,7 +204,7 @@ class ParameterizedCompletionDescriptionToolTip {
 //                sb.append(desc);
 //            }
 //        }
-        System.out.println("updatetext = " + sb.toString());
+//        System.out.println("updatetext = " + sb.toString());
         descLabel.setText(sb.toString());
         tooltip.pack();
 
